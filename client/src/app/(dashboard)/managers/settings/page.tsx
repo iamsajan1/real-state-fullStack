@@ -1,4 +1,5 @@
 "use client";
+
 import SettingsForm from "@/components/SettingsForm";
 import {
   useGetAuthUserQuery,
@@ -8,8 +9,8 @@ import React from "react";
 
 const ManagerSettings = () => {
   const { data: authUser, isLoading } = useGetAuthUserQuery();
-  console.log('authUser: ', authUser);
   const [updateManager] = useUpdateManagerSettingsMutation();
+
   if (isLoading) return <>Loading...</>;
 
   const initialData = {
@@ -20,10 +21,11 @@ const ManagerSettings = () => {
 
   const handleSubmit = async (data: typeof initialData) => {
     await updateManager({
-      cognitoId: authUser?.cognitoInfo.userId,
+      cognitoId: authUser?.cognitoInfo?.userId,
       ...data,
     });
   };
+
   return (
     <SettingsForm
       initialData={initialData}
