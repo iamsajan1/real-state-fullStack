@@ -3,7 +3,7 @@
 import { NAVBAR_HEIGHT } from "@/lib/constants";
 import { useAppDispatch, useAppSelector } from "@/state/redux";
 import { useSearchParams } from "next/navigation";
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import FiltersBar from "./FiltersBar";
 import FiltersFull from "./FiltersFull";
 import { cleanParams } from "@/lib/utils";
@@ -11,7 +11,8 @@ import { setFilters } from "@/state";
 import Map from "./Map";
 import Listings from "./Listings";
 
-const SearchPage = () => {
+// Wrap the component that uses useSearchParams in Suspense
+const SearchContent = () => {
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const isFiltersFullOpen = useAppSelector(
@@ -28,7 +29,6 @@ const SearchPage = () => {
         } else {
           acc[key] = value === "any" ? null : value;
         }
-
         return acc;
       },
       {}
@@ -36,7 +36,7 @@ const SearchPage = () => {
 
     const cleanedFilters = cleanParams(initialFilters);
     dispatch(setFilters(cleanedFilters));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams, dispatch]); // Added dependencies
 
   return (
     <div
@@ -62,6 +62,14 @@ const SearchPage = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const SearchPage = () => {
+  return (
+    <Suspense fallback={<div>Loading search filters...</div>}>
+      <SearchContent />
+    </Suspense>
   );
 };
 
