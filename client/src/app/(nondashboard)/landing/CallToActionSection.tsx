@@ -4,8 +4,10 @@ import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { useGetAuthUserQuery } from "@/state/api";
 
 const CallToActionSection = () => {
+  const { data: authUser } = useGetAuthUserQuery();
   return (
     <div className="relative py-24">
       <Image
@@ -34,7 +36,9 @@ const CallToActionSection = () => {
               location.
             </p>
             <div className="flex justify-center md:justify-start gap-4 content-center">
-              <button
+              {!authUser ? (
+
+                <> <button
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 className="inline-block text-primary-700 bg-white rounded-lg px-6 py-3 font-semibold hover:bg-primary-500 hover:text-primary-50"
               >
@@ -46,7 +50,14 @@ const CallToActionSection = () => {
                 scroll={false}
               >
                 Sign Up
-              </Link>
+              </Link></>
+              ):(<button
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                className="w-full max-w-lg  rounded-xl border-none bg-gray-400 h-12 hover:bg-white"
+              >
+                Search Property
+              </button>)}
+             
             </div>
           </div>
         </div>

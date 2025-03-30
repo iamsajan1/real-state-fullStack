@@ -59,7 +59,7 @@ const Navbar = () => {
               />
               <div className="text-xl font-bold">
                 PROP
-                <span className="text-secondary-500 font-light hover:!text-primary-300">
+                <span className="text-secondary-500 text-xl font-bold hover:!text-primary-300">
                   lly
                 </span>
               </div>

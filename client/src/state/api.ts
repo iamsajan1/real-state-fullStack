@@ -238,33 +238,25 @@ export const api = createApi({
       },
     }),
 
-    createProperty: build.mutation<Property, FormData>({
-      query: (newProperty) => ({
-        url: `properties`,
-        method: "POST",
-        body: newProperty,
-      }),
-      invalidatesTags: (result) => [
-        { type: "Properties", id: "LIST" },
-        { type: "Managers", id: result?.manager?.id },
-      ],
-      async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          success: "Property created successfully!",
-          error: "Failed to create property.",
-        });
-      },
+    createProperty: build.mutation<
+    Property,
+    FormData
+  >({
+    query: ( newProperty ) => ({
+      url: `properties`,
+      method: "POST",
+      body: newProperty,
     }),
-
+    invalidatesTags: (result) => [
+      { type: "Properties", id: "LIST" },
+      { type: "Managers", id: result?.manager.id },
+    ],
+  }),
     // lease related enpoints
+  
     getLeases: build.query<Lease[], number>({
-      query: () => "leases",
-      providesTags: ["Leases"],
-      async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          error: "Failed to fetch leases.",
-        });
-      },
+      query: () => `leases`,
+      providesTags: (result) => ["Leases"],
     }),
 
     getPropertyLeases: build.query<Lease[], number>({
@@ -277,14 +269,9 @@ export const api = createApi({
       },
     }),
 
-    getPayments: build.query<Payment[], number>({
+   getPayments: build.query<Payment[], number>({
       query: (leaseId) => `leases/${leaseId}/payments`,
       providesTags: ["Payments"],
-      async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          error: "Failed to fetch payment info.",
-        });
-      },
     }),
 
     // application related endpoints
